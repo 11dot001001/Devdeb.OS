@@ -1,1 +1,1 @@
-"# Devdeb.OS" 
+It's about studying of OS internal.
