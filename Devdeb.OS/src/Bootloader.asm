@@ -1,41 +1,18 @@
-﻿;******************
-org 0x7c00
+org 0x7C00
 bits 16
 
-Start:
-   mov ax, cs
-   cli
-   mov ss, ax
-   mov es, ax
-   mov ds, ax
-   sti
+jmp main
 
-   mov cx, 1 ;symbol repetitions number 
+message db 'Hello World!', 13, 10, 0
 
-   ;cursor setter
-   mov ah, 2
-   mov bh, 0
-   mov dh, 0
-   mov dl, 0
-   int 10h
-   ;symbol output
-   mov ah, 9
-   mov bx, 0Fh
-   mov al, 'H'
-   int 10h 
+%include "src/Write.asm"
 
-   ;cursor setter
-	mov ah, 2
-	mov bh, 0
-	mov dh, 0
-	mov dl, 1
-	int 10h
-	;symbol output
-	mov ah, 9
-	mov bx, 0Fh
-	mov al, 'I'
-	int 10h 
+main:
+	xor ax,ax
+	mov ds, ax
 
+	cld
+	BiosWriteLine message
 	hlt
 
 times 510 - ($-$$) db 0
