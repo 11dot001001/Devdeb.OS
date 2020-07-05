@@ -4,9 +4,11 @@ Reg16BitValue dw 0
 Reg16BitOutput db '0x0000', 0 
 HexArray db '0123456789ABCDEF'
 EmptySymbol db ' '
-ConsoleRowCount db 20
+ConsoleRowCount equ 20
 ConsoleColumnCount equ 80
 CharacterByteCount equ 2
+VideoMemory equ 0xb800
+CharacterColor equ 0x0F;white on black
 
 %macro BiosWriteLine 1
  	mov si, word %1
@@ -47,7 +49,7 @@ printReg16Bit_hexloop:
 ret
 
 ClearConsole:
-	mov ax, 0xb800
+	mov ax, VideoMemory
 	mov es, ax
 	mov byte [PositionX], 0
 	mov byte [PositionY], 0
@@ -72,7 +74,7 @@ ClearConsole_exit:
 ret
 
 writeline2:
-	mov ax, 0xb800 ;text video memory offset
+	mov ax, VideoMemory
 	mov es, ax
 	lodsb
 	cmp al, 0
@@ -85,7 +87,8 @@ exit:
 ret
 
 writeCharacter:
-	mov ah, 0x0F ;white on black
+;in al contains character
+	mov ah, CharacterColor
 	mov cx, ax
 	movzx ax, byte [PositionY] 
 	mov dx, CharacterByteCount * ConsoleColumnCount
